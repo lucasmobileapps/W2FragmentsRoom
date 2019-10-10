@@ -2,20 +2,60 @@ package com.example.w2fragmentsroom.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.w2fragmentsroom.R
+import com.example.w2fragmentsroom.adapter.PersonAdapter
+import com.example.w2fragmentsroom.database.PersonDAO
+import com.example.w2fragmentsroom.database.PersonDatabase
+import com.example.w2fragmentsroom.database.PersonEntity
+import kotlinx.android.synthetic.main.recyclerview_fragment_layout.*
 
 class MainActivity : AppCompatActivity(),
     FragmentEntry.FragmentEntryListener,
     FragmentRelation.FragmentRelationListener,
-    FragmentRV.FragmentRVListener{
+    FragmentRV.FragmentRVListener,
+    PersonAdapter.PersonAdapterDelegate{
 
     private val fragmentEntry = FragmentEntry()
     private val fragmentRelation = FragmentRelation()
-    private val fragmentRV = FragmentRV()
+    private val fragmentRV: FragmentRV by lazy {
+        FragmentRV().apply {
+            val valueKey = "get_value"
+            val bundle = Bundle()
+            bundle.putString(valueKey, "Some text goes here.")
+            arguments = bundle
+        }
+    }
+
+    private lateinit var myDAO: PersonDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        myDAO = Room.databaseBuilder(
+            this,
+            PersonDatabase::class.java,
+            "person.db")
+            .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
+            .build()
+
+        val person1  = PersonEntity("Charlie Brown", "Family")
+        val person2  = PersonEntity("Ramsey Noah", "Friend")
+        val person3  = PersonEntity("Gordon Ramsey", "Work")
+        val person4 = PersonEntity("Bill Gates", "Family")
+
+        myDAO.personDao().insertAllPersons(person1, person2, person3, person4)
+
+        val personList = myDAO.personDao().getAllPersons()
+        Log.d("JOG", "In Main ${personList}")
+
 
         supportFragmentManager.beginTransaction()
             .add(R.id.entry_framelayout, fragmentEntry)
@@ -25,23 +65,25 @@ class MainActivity : AppCompatActivity(),
             .add(R.id.RV_framelayout, fragmentRV)
             .commit()
 
+
+        fragmentRV.setFragmentRVListener(this)
+        fragmentRelation.setFragmentRelationListener(this)
+        fragmentEntry.setFragmentEntryListener(this)
     }
 
-    override fun fragmentEntryRelationButtonPressed() {
-        val valueKey = "get_value"
 
-        val bundle = Bundle()
-        bundle.putString(valueKey, "Some text goes here.")
-        fragmentRelation.arguments = bundle
+    override fun fragmentEntryRelationButtonPressed() {
+
         fragmentRelation.setFragmentRelationListener(this)
         supportFragmentManager.beginTransaction()
-            .add(R.id.relation_framelayout, fragmentRelation)
+            .replace(R.id.relation_framelayout, fragmentRelation)
             .addToBackStack(null)
             .commit()
     }
 
     override fun fragmentEntryAddButtonPressed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d("JOG", "PRESSED")
+        Log.d("JOG", "PRESSED")
     }
 
     override fun fragmentWorkRelationButtonPressed() {
@@ -49,7 +91,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun fragmentFamilyRelationButtonPressed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d("JOG", "PRESSED")
+
     }
 
     override fun fragmentFriendRelationButtonPressed() {
@@ -57,6 +100,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun fragmentRVSelected() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun noteSelect(note: PersonEntity) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
