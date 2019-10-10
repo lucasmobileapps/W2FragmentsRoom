@@ -22,14 +22,7 @@ class MainActivity : AppCompatActivity(),
 
     private val fragmentEntry = FragmentEntry()
     private val fragmentRelation = FragmentRelation()
-    private val fragmentRV: FragmentRV by lazy {
-        FragmentRV().apply {
-            val valueKey = "get_value"
-            val bundle = Bundle()
-            bundle.putString(valueKey, "Some text goes here.")
-            arguments = bundle
-        }
-    }
+    private lateinit var fragmentRV: FragmentRV
 
     private lateinit var myDAO: PersonDatabase
 
@@ -55,6 +48,8 @@ class MainActivity : AppCompatActivity(),
 
         val personList = myDAO.personDao().getAllPersons()
         Log.d("JOG", "In Main ${personList}")
+
+        fragmentRV = FragmentRV(personList)
 
 
         supportFragmentManager.beginTransaction()

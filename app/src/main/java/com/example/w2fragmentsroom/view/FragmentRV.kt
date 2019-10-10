@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.w2fragmentsroom.R
 import com.example.w2fragmentsroom.adapter.PersonAdapter
+import com.example.w2fragmentsroom.database.PersonDAO
+import com.example.w2fragmentsroom.database.PersonDatabase
 import com.example.w2fragmentsroom.database.PersonEntity
 import kotlinx.android.synthetic.main.recyclerview_fragment_layout.*
 
-class FragmentRV : Fragment(), PersonAdapter.PersonAdapterDelegate {
+class FragmentRV(private var personList: MutableList<PersonEntity>) : Fragment(), PersonAdapter.PersonAdapterDelegate {
 
     private lateinit var fragmentRVListener: FragmentRVListener
 
@@ -54,7 +56,6 @@ class FragmentRV : Fragment(), PersonAdapter.PersonAdapterDelegate {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val personList = myDAO.getAllPersons()
 
         Log.d("JOG", "${personList}")
 
