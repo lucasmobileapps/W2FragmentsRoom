@@ -1,13 +1,17 @@
 package com.example.w2fragmentsroom.database
 
+import android.database.Cursor
 import androidx.room.*
 
 @Dao
 interface PersonDAO{
-    @Query("SELECT * FROM my_persons")
+    @Query("SELECT * FROM persons")
     fun getAllPersons(): MutableList<PersonEntity>
 
-    @Query("DELETE FROM my_persons")
+    @Query("SELECT * FROM persons")
+    fun getAllPersonstoProvider(): Cursor
+
+    @Query("DELETE FROM persons")
     fun deleteAllPersons(): Int
 
     @Delete
