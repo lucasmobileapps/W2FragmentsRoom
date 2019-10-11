@@ -16,7 +16,7 @@ import com.example.w2fragmentsroom.database.PersonDatabase
 import com.example.w2fragmentsroom.database.PersonEntity
 import kotlinx.android.synthetic.main.recyclerview_fragment_layout.*
 
-class FragmentRV(private var personList: MutableList<PersonEntity>) : Fragment(), PersonAdapter.PersonAdapterDelegate {
+class FragmentRV() : Fragment(), PersonAdapter.PersonAdapterDelegate {
 
     private lateinit var fragmentRVListener: FragmentRVListener
 
@@ -25,21 +25,25 @@ class FragmentRV(private var personList: MutableList<PersonEntity>) : Fragment()
         fun fragmentRVSelected()
     }
 
-    override fun noteSelect(note: PersonEntity) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun noteSelect(person: PersonEntity) {
     }
 
     fun setFragmentRVListener(listener: FragmentRVListener) {
         fragmentRVListener = listener
     }
 
-    fun setUpRecyclerView(list: MutableList<PersonEntity>){
-        fragment_recyclerview.adapter = PersonAdapter(list, this)
+    fun setUpRecyclerView(){
+        fragment_recyclerview.adapter = PersonAdapter(this)
         fragment_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
 
 
         val itemDecorator = DividerItemDecoration(context, LinearLayout.VERTICAL)
         fragment_recyclerview.addItemDecoration(itemDecorator)
+    }
+
+    fun notifyRV(updatedList: MutableList<PersonEntity>){
+        Log.d("JOGGY", "${updatedList}")
+        (fragment_recyclerview.adapter as PersonAdapter).submitList(updatedList)
     }
 
 
@@ -57,8 +61,6 @@ class FragmentRV(private var personList: MutableList<PersonEntity>) : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("JOG", "${personList}")
-
-        setUpRecyclerView(personList)
+        setUpRecyclerView()
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "my_persons")
 data class PersonEntity(
-    @PrimaryKey(autoGenerate = true) var primaryKey: Int?,
+    @PrimaryKey(autoGenerate = true) var id: Int?,
     @ColumnInfo(name = "person_name") var personName: String? = "Lucas",
     @ColumnInfo(name = "person_relation") var personRelation: String? = "Myself"
 ) {

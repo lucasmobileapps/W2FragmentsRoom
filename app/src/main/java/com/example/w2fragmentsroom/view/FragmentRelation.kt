@@ -14,11 +14,13 @@ class FragmentRelation : Fragment() {
 
     private lateinit var fragmentRelationListener: FragmentRelationListener
 
+
     interface FragmentRelationListener {
         fun fragmentWorkRelationButtonPressed()
         fun fragmentFamilyRelationButtonPressed()
         fun fragmentFriendRelationButtonPressed()
     }
+
 
     fun setFragmentRelationListener(listener: FragmentRelationListener) {
         fragmentRelationListener = listener
@@ -39,16 +41,22 @@ class FragmentRelation : Fragment() {
         friend_edittext.setOnClickListener { _ ->
 
             fragmentRelationListener.fragmentFriendRelationButtonPressed()
+            fragmentManager?.popBackStack()
+
 
         }
         work_edittext.setOnClickListener { _ ->
 
             fragmentRelationListener.fragmentWorkRelationButtonPressed()
+            fragmentManager?.popBackStack()
+
 
         }
         family_edittext.setOnClickListener { _ ->
 
             fragmentRelationListener.fragmentFamilyRelationButtonPressed()
+            fragmentManager?.popBackStack()
+
 
         }
     }

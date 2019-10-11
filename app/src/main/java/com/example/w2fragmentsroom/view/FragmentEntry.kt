@@ -19,6 +19,10 @@ class FragmentEntry : Fragment() {
         fun fragmentEntryAddButtonPressed()
     }
 
+    fun fromRelationFrag(relation : String){
+        relation_edittext.text = relation
+    }
+
     fun setFragmentEntryListener(listener: FragmentEntryListener) {
         fragmentEntryListener = listener
     }
@@ -32,9 +36,9 @@ class FragmentEntry : Fragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         relation_edittext.setOnClickListener { _ ->
 

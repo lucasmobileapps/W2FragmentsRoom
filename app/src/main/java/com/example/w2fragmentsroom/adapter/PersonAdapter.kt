@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.w2fragmentsroom.R
 import com.example.w2fragmentsroom.database.PersonEntity
 
-class PersonAdapter(private val personList: List<PersonEntity>, private val personadapterDelegate: PersonAdapterDelegate) : RecyclerView.Adapter<PersonAdapter.PersonViewHolder>() {
+class PersonAdapter(private val personadapterDelegate: PersonAdapterDelegate)
+    : ListAdapter<PersonEntity, PersonAdapter.PersonViewHolder>(PersonDiffUtil()){
     interface  PersonAdapterDelegate{
-        fun noteSelect(note: PersonEntity)
+        fun noteSelect(person: PersonEntity)
     }
 
     override fun onCreateViewHolder(
@@ -20,16 +23,12 @@ class PersonAdapter(private val personList: List<PersonEntity>, private val pers
         return PersonViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return personList.size
-    }
-
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
         holder.apply {
-            personNameTextView.text = personList.get(position).personName
-            personRelationTextView.text = personList.get(position).personRelation
+            personNameTextView.text = getItem(position).personName
+            personRelationTextView.text = getItem(position).personRelation
             viewGroup.setOnClickListener{
-                personadapterDelegate.noteSelect(personList.get(position))
+                personadapterDelegate.noteSelect(getItem(position))
             }
         }
     }
@@ -38,5 +37,15 @@ class PersonAdapter(private val personList: List<PersonEntity>, private val pers
         val personRelationTextView: TextView = view.findViewById(R.id.personRelation_textiew)
         val viewGroup: ConstraintLayout = view.findViewById(R.id.person_itemview)
 
+    }
+}
+
+class PersonDiffUtil : DiffUtil.ItemCallback<PersonEntity>(){
+    override fun areItemsTheSame(oldItem: PersonEntity, newItem: PersonEntity): Boolean {
+       return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: PersonEntity, newItem: PersonEntity): Boolean {
+        return oldItem.personName == newItem.personName && oldItem.personRelation == newItem.personRelation
     }
 }
