@@ -102,8 +102,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun createGuest():PersonEntity{
-        return PersonEntity(null,
-            name_edittext.text.toString(), relationSelect)
+        var personURL: String? = ""
+        when {
+            relationSelect == "Work" -> personURL = "https://www.pinerest.org/media/APA-Blog-Work-Stress-I.jpg"
+            relationSelect == "Family" -> personURL = "https://www.familyvacationcritic.com/uploads/sites/19/2018/09/large-multi-gen-travel-1280x640.jpg"
+            relationSelect == "Friend" -> personURL = "https://media3.s-nbcnews.com/j/newscms/2018_14/1315203/jennifer-aniston-today-180202-tease3_55d70b76a20fefbedd4902d370f0e574.fit-760w.jpg"
+        }
+        return PersonEntity( name_edittext.text.toString(), relationSelect, personURL)
     }
 
 

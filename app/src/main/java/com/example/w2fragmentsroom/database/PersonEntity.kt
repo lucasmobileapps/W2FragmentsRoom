@@ -8,10 +8,14 @@ import androidx.room.PrimaryKey
 data class PersonEntity(
     @PrimaryKey(autoGenerate = true) var id: Int?,
     @ColumnInfo(name = "person_name") var personName: String? = "Lucas",
-    @ColumnInfo(name = "person_relation") var personRelation: String? = "Myself"
-) {
+    @ColumnInfo(name = "person_relation") var personRelation: String? = "Myself",
+    @ColumnInfo(name = "person_url") var personUrl: String?  )
+
+
+ {
     constructor(
         personName: String?,
-        personRelation: String?
-    ) : this(null, personName, personRelation)
+        personRelation: String?,
+        personUrl: String?
+    ) : this(null, personName, personRelation, personUrl)
 }
